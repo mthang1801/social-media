@@ -1,5 +1,7 @@
 {
   "mongoURI" : "mongodb+srv://social_media:social_media@cluster0-ru8gg.mongodb.net/test?retryWrites=true&w=majority",
   "saltRound" : 10,
-  "JWT_SECRET" : "jwt_secret_token"
+  "JWT_SECRET" : "jwt_secret_token",
+  "github_clientId" : "cbc2efbf124ca7280568",
+  "github_clientSecret" : "151b9e644678653a618f1ca126557f4891c82296"
 }
