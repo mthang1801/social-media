@@ -1,3 +1,5 @@
 {
-  "mongoURI" : "mongodb+srv://social_media:social_media@cluster0-ru8gg.mongodb.net/test?retryWrites=true&w=majority"
+  "mongoURI" : "mongodb+srv://social_media:social_media@cluster0-ru8gg.mongodb.net/test?retryWrites=true&w=majority",
+  "saltRound" : 10,
+  "JWT_SECRET" : "jwt_secret_token"
 }
