@@ -116,13 +116,13 @@ router.get("/user/:userId", async(req, res) => {
   try {   
     let profile = await ProfileModel.findOne({user :  req.params.userId}).populate("user", ["name", "avatar"]);
     if(!profile){
-      return res.status(400).json({msg : "Profile not found"});
+      return res.status(404).json({msg : "Profile not found"});
     }
     return res.status(200).json({profile});
   } catch (err) {
     console.log(err)
     if(err instanceof require("mongoose").Error.CastError){
-      return res.status(400).json({msg : "Profile not found"});
+      return res.status(404).json({msg : "Profile not found"});
     }
     return res.status(500).send("Server error");
   }
