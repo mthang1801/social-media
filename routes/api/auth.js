@@ -16,6 +16,11 @@ router.get("/user", auth, async (req,res) => {
   }
 })
 
+/**
+ * @route POST api/auth/login
+ * @desc login account
+ * @access private
+ */
 router.post("/login",[
   check("email", "Email is invalid")
     .isEmail(),
