@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import axios from "axios";
-const Login = () => {
+import {login} from "../../flux/actions/auth";
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
+
+const Login = ({login, isAuthenticated}) => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -15,20 +19,16 @@ const Login = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    try {
-      let data = JSON.stringify({email, password});
-      let config = {
-        headers : {
-          "Content-Type": "application/json"
-        }
-      }
-      let user = await axios.post("/api/auth/login", data , config);
-      console.log(user);
+    try {      
+      login({email, password});
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   }
-
+  //Redirect if isAuthenticated is true
+  if(isAuthenticated){
+    return <Redirect to="/dashboard"></Redirect>
+  }
   return (
     <>
       <h1 class="large text-primary">Sign In</h1>
@@ -63,4 +63,13 @@ const Login = () => {
   )
 };
 
-export default Login;
+const mapStateToProps = state => ({
+  isAuthenticated : state.auth.isAuthenticated
+})
+
+Login.propTypes = {
+  login : PropTypes.func.isRequired,
+  isAuthenticated : PropTypes.bool.isRequired
+}
+
+export default connect(mapStateToProps, {login})(Login);

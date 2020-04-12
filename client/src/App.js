@@ -8,7 +8,12 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {Provider} from "react-redux";
 import store from "./store";
 import Alert from "./components/layout/Alert";
+import {loadUser} from "./flux/actions/auth";
 function App() {
+  React.useEffect(() => {
+    store.dispatch(loadUser());
+  },[])
+ const {loading, isAuthenticated} = store.getState().auth;
   return (
     <Provider store={store}>
       <Router>
@@ -26,5 +31,6 @@ function App() {
     
   );
 }
+
 
 export default App;

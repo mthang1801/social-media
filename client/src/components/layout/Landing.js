@@ -1,6 +1,8 @@
 import React from 'react'
-
-const Landing = () => {
+import {Link} from 'react-router-dom'
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
+const Landing = ({auth : {isAuthenticated, loading}}) => {
   return (
     <>
       <section className="landing">
@@ -11,10 +13,13 @@ const Landing = () => {
               Create a developer profile/portfolio, share posts and get help from
               other developers
             </p>
-            <div className="buttons">
-              <a href="register.html" className="btn btn-primary">Sign Up</a>
-              <a href="login.html" className="btn btn-light">Login</a>
-            </div>
+            {!isAuthenticated ? (<>
+              <div className="buttons">
+                <a href="/register" className="btn btn-primary">Sign Up</a>
+                <a href="/login" className="btn btn-light">Login</a>
+              </div>
+            </>) : null}
+            
           </div>
         </div>
       </section> 
@@ -22,5 +27,11 @@ const Landing = () => {
   )
 };
 
+const  mapStateToProps = state => ({
+  auth : state.auth
+})
 
-export default Landing;
+Landing.propTypes = {
+  auth : PropTypes.object.isRequired
+}
+export default connect(mapStateToProps)(Landing);
