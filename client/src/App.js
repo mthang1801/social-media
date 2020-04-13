@@ -4,6 +4,9 @@ import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import Dashboard from "./components/dashboard/Dashboard";
+import PrivateRoute from "./components/routing/PrivateRoute";
+import CreateProfile from "./components/profile-forms/CreateProfile"
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {Provider} from "react-redux";
 import store from "./store";
@@ -13,7 +16,7 @@ function App() {
   React.useEffect(() => {
     store.dispatch(loadUser());
   },[])
- const {loading, isAuthenticated} = store.getState().auth;
+ const {isLoading, isAuthenticated} = store.getState().auth;
   return (
     <Provider store={store}>
       <Router>
@@ -22,8 +25,11 @@ function App() {
         <section className="container">
           <Alert/>
           <Switch>
-            <Route path="/login"><Login/></Route> 
-            <Route path="/register"><Register/></Route>
+            <Route path="/login" component={Login}></Route> 
+            <Route path="/register" component={Register}></Route>
+            <PrivateRoute exact path="/dashboard" component={Dashboard}></PrivateRoute>
+            <PrivateRoute path="/create-profile" component={CreateProfile}></PrivateRoute>
+            <Route path="*"><h2>404 - Not Found</h2></Route>
           </Switch>
         </section>
       </Router>

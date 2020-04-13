@@ -8,8 +8,7 @@ export const loadUser = () => async dispatch =>{
     setAuthToken(localStorage.token);
   }
   try {
-    let res = await axios.get("/api/auth/user");
-    console.log(res);
+    let res = await axios.get("/api/auth/user");    
     dispatch({
       type : types.USER_LOADED,
       payload : res.data
@@ -84,4 +83,8 @@ export const logout = () => dispatch => {
     type : types.LOGOUT
   });
   setAuthToken(null);
+  //clear profile
+  dispatch({
+    type : types.CLEAR_PROFILE
+  })
 }

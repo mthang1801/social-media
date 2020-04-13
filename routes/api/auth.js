@@ -34,26 +34,26 @@ router.post("/login",[
   }
   const {email, password} = req.body ;
   try {
-    let user = await UserModel.findOne({email});
-    user = user.toObject();
+    let user = await UserModel.findOne({email});  
     if(!user){
-      return res.status(400).json({errors : [{msg: "Email or password is incorrect"}]});
+      return res.status(400).json({errors : [{msg: "Email doesn't existed"}]});
     }
     let isMatch = await bcrypt.compare(password, user.password); 
     if(!isMatch){
       return res.status(400).json({errors : [{msg: "Email or password is incorrect"}]});
     }
+    user = user.toObject();
     let payload = {
       user : {
         id : user._id 
       }
-    }
+    }    
     let token = await jwt.sign(payload, config.get("JWT_SECRET"), { expiresIn: 3600});       
     delete user.password;
     return res.status(200).json({token, user})
   } catch (error) {
     console.log(error.message);
-    return res.status(400).json({msg : [{"msg" : "server error"}]});
+    return res.status(400).json({errors : [{msg : "server error"}]});
   }
 })
 module.exports = router; 
