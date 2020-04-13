@@ -7,13 +7,18 @@ const { check, validationResult } = require("express-validator/check");
 const ProfileModel = require("../../models/Profile");
 const UserModel = require("../../models/User");
 
+/**
+ * @route GET api/profile/me
+ * @desc get current profile
+ * @access private
+ */
 router.get("/me", auth, async (req, res) => {
-  try {
-    let profile = await ProfileModel.findOne({user : req.user.id}).populate("user", ["name", "avatar"]);
+  try {    
+    let profile = await ProfileModel.findOne({user : req.user.id}).populate("users", ["name", "avatar"]);    
     if(!profile){
       return res.status(400).json({msg : "There is no profile for user"});
     }
-    return res.status(400).json({profile});
+    return res.status(200).json(profile);
   } catch (error) {
     console.log(error.message);
     return res.status(400).json({msg : error})
@@ -34,8 +39,7 @@ router.post(
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
-    }
-
+    }  
     let {
       company,
       website,
@@ -77,9 +81,8 @@ router.post(
           { user: req.user.id },
           { $set : profileFields, updatedAt : new Date() },
           { new: true }
-        );
-        console.log(profile);
-        return res.status(200).json({profile});
+        );       
+        return res.status(200).json(profile);
       }
       
       //Create new Profile
