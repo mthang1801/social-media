@@ -13,6 +13,7 @@ export const loadUser = () => async dispatch =>{
       type : types.USER_LOADED,
       payload : res.data
     })
+    
   } catch (error) {
     dispatch({
       type : types.AUTH_ERROR
