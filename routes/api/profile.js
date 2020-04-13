@@ -190,7 +190,7 @@ router.put("/experience", auth, [
      return res.status(200).json({profile});
    } catch (error) {
      console.log(error);
-     return res.status(500).send("Server error");
+     return res.status(500).json({errors : [error.message]});
    }
 });
 
