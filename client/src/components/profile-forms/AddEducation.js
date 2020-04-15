@@ -2,11 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addEducation } from "../../flux/actions/profile";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 const AddEducation = ({ addEducation, history }) => {
   const [formData, setFormData] = React.useState({
     school: "",
-    fieldofstudy: "",
+    fieldtostudy: "",
     degree: "",
     from: "",
     to: "",
@@ -16,7 +16,7 @@ const AddEducation = ({ addEducation, history }) => {
 
   const {
     school,
-    fieldofstudy,
+    fieldtostudy,
     degree,
     from,
     to,
@@ -39,14 +39,14 @@ const AddEducation = ({ addEducation, history }) => {
   };
   return (
     <>
-      <h1 class='large text-primary'>Add Your Education</h1>
-      <p class='lead'>
-        <i class='fas fa-graduation-cap'></i> Add any school, bootcamp, etc that
+      <h1 className='large text-primary'>Add Your Education</h1>
+      <p className='lead'>
+        <i className='fas fa-graduation-cap'></i> Add any school, bootcamp, etc that
         you have attended
       </p>
       <small>* = required field</small>
-      <form class='form' onSubmit={onSubmit}>
-        <div class='form-group'>
+      <form className='form' onSubmit={onSubmit}>
+        <div className='form-group'>
           <input
             type='text'
             placeholder='* School or Bootcamp'
@@ -56,7 +56,7 @@ const AddEducation = ({ addEducation, history }) => {
             required
           />
         </div>
-        <div class='form-group'>
+        <div className='form-group'>
           <input
             type='text'
             placeholder='* Degree or Certificate'
@@ -66,7 +66,7 @@ const AddEducation = ({ addEducation, history }) => {
             required
           />
         </div>
-        <div class='form-group'>
+        <div className='form-group'>
           <input
             type='text'
             placeholder='Location'
@@ -75,29 +75,29 @@ const AddEducation = ({ addEducation, history }) => {
             onChange={handleChange}
           />
         </div>
-        <div class='form-group'>
-          <input type='text' placeholder='Field Of Study' name='fieldofstudy' value={fieldofstudy} onChange={handleChange}/>
+        <div className='form-group'>
+          <input type='text' placeholder='Field Of Study' name='fieldtostudy' value={fieldtostudy} onChange={handleChange}/>
         </div>
-        <div class='form-group'>
+        <div className='form-group'>
           <h4>From Date</h4>
           <input type='date' name='from' value={from} onChange={handleChange}/>
         </div>
-        <div class='form-group'>
+        <div className='form-group'>
           <p>
             <input type='checkbox' name='current' checked={current} onChange={handleChange} /> Current School or
             Bootcamp
           </p>
         </div>
         {!current && (
-          <div class='form-group'>
+          <div className='form-group'>
           <h4>To Date</h4>
-          <input type='date' name='to' value="to" onChange={handleChange} />
+          <input type='date' name='to' value={to} onChange={handleChange} />
           </div>        
         )}       
-        <input type='submit' class='btn btn-primary my-1' />
-        <a class='btn btn-light my-1' href='dashboard.html'>
+        <input type='submit' className='btn btn-primary my-1' />
+        <Link className='btn btn-light my-1' to='/dashboard'>
           Go Back
-        </a>
+        </Link>
       </form>
     </>
   );

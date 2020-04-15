@@ -42,4 +42,4 @@ const ProfileSchema = new mongoose.Schema({
   updatedAt : { type : Date, default : null}
 })
 
-module.exports = Profile = mongoose.model("profile", ProfileSchema);
+module.exports = ProfileModel = mongoose.model("profile", ProfileSchema);

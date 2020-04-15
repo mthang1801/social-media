@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
-import {setAlert} from "../../flux/actions/alerts";
 const Alert = ({alerts}) =>{
 
   return alerts!= null && alerts.length>0 && alerts.map(alert => (

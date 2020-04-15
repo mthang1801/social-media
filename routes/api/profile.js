@@ -14,7 +14,7 @@ const UserModel = require("../../models/User");
  */
 router.get("/me", auth, async (req, res) => {
   try {    
-    let profile = await ProfileModel.findOne({user : req.user.id}).populate("users", ["name", "avatar"]);    
+    let profile = await ProfileModel.findOne({user : req.user.id}).populate("users", ["name", "avatar"], "user");    
     if(!profile){
       return res.status(400).json({msg : "There is no profile for user"});
     }
@@ -102,9 +102,9 @@ router.post(
  * @access public
  */
 router.get("/",  async(req, res) => {
-  try {
-    let profiles = await ProfileModel.find().populate("user",[ "name", "avatar"]);
-    res.json(profiles);
+  try {    
+    const profiles = await ProfileModel.find().populate("user", ["name" , "avatar"], "user");
+    return res.status(200).json(profiles);
   } catch (error) {
     return res.status(400).json({msg : error.message});
   }
@@ -117,11 +117,11 @@ router.get("/",  async(req, res) => {
  */
 router.get("/user/:userId", async(req, res) => {
   try {   
-    let profile = await ProfileModel.findOne({user :  req.params.userId}).populate("user", ["name", "avatar"]);
+    let profile = await ProfileModel.findOne({user :  req.params.userId}).populate("user", ["name", "avatar"], "user");
     if(!profile){
       return res.status(404).json({msg : "Profile not found"});
     }
-    return res.status(200).json({profile});
+    return res.status(200).json(profile);
   } catch (err) {
     console.log(err)
     if(err instanceof require("mongoose").Error.CastError){
@@ -187,7 +187,7 @@ router.put("/experience", auth, [
      let profile = await ProfileModel.findOne({user : req.user.id});
      profile.experience.unshift(newExpericence);
      await profile.save();
-     return res.status(200).json({profile});
+     return res.status(200).json(profile);
    } catch (error) {
      console.log(error);
      return res.status(500).json({errors : [error.message]});
@@ -234,7 +234,7 @@ router.put("/experience/:expId", auth, [
      let index = profile.experience.findIndex( expItem => expItem._id == req.params.expId);
      profile.experience.set(index, updateExpericence);
      profile.save();
-     return res.status(200).json({profile});
+     return res.status(200).json(profile);
    } catch (error) {
      console.log(error.message);
      return res.status(500).send("Server error");
@@ -256,7 +256,7 @@ router.delete("/experience/:expId", auth, async(req, res) => {
     }
     profile.experience.splice(index,1);
     profile.save();
-    return res.status(200).json({profile});
+    return res.status(200).json(profile);
   } catch (error) {
     console.log(error);
     return res.status(500).send("Server error");
@@ -298,7 +298,7 @@ router.put("/education", auth, [
      let profile = await ProfileModel.findOne({user : req.user.id});
      profile.education.unshift(newEducation);
      await profile.save();
-     return res.status(200).json({profile});
+     return res.status(200).json(profile);
    } catch (error) {
      console.log(error);
      return res.status(500).send("Server error");
@@ -368,13 +368,18 @@ router.delete("/education/:eduId", auth, async(req, res) => {
     }
     profile.education.splice(index,1);
     profile.save();
-    return res.status(200).json({profile});
+    return res.status(200).json(profile);
   } catch (error) {
     console.log(error);
     return res.status(500).send("Server error");
   }
 });
 
+/**
+ * @route GET api/profile/github/:username
+ * @desc get github repos
+ * @access public
+ */
 router.get("/github/:username", async (req, res) => {
   try{
     const options = {

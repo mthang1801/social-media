@@ -1,11 +1,9 @@
-import React, {useState, Fragment} from 'react';
+import React, {useState} from 'react';
 import {Link, Redirect} from "react-router-dom";
 import {connect} from "react-redux";
-import axios from "axios";
 import {setAlert} from "../../flux/actions/alerts";
 import {register} from "../../flux/actions/auth";
 import PropTypes from "prop-types";
-import Alert from "../layout/Alert";
 const Register = ({isAuthenticated, setAlert, register}) => {
   const [formData, setFormData] = useState({
     name: "",

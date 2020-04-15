@@ -1,7 +1,7 @@
-import React, {useState, useEffect, createRef} from 'react'
+import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
-import {Redirect, withRouter} from "react-router-dom";
+import { withRouter} from "react-router-dom";
 import {Link} from "react-router-dom";
 import {createProfile, getCurrentProfile} from "../../flux/actions/profile";
 const EditProfile = ({ profile : {profile, loading}, createProfile, history, getCurrentProfile }) => {
@@ -44,7 +44,7 @@ const EditProfile = ({ profile : {profile, loading}, createProfile, history, get
     }
     
 
-  }, [loading]);
+  }, [loading, getCurrentProfile]);
 
   const {
     company,
