@@ -58,6 +58,7 @@ img {
   margin-bottom: 1rem;
 }
 
+
 .lead {
   font-size: 1.25em;
   margin-bottom: 1rem;
@@ -465,7 +466,7 @@ button {
   display: grid;
   grid-template-columns: 1fr 4fr;
   grid-gap: 2rem;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .post > div:first-child {

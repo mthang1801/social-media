@@ -72,7 +72,7 @@ export const login = ({email, password}) => async dispatch => {
       type : types.LOGIN_FAIL
     })
     let errorsList = error.response.data.errors;
-    errorsList.length && errorsList.forEach(err => {    
+    errorsList.forEach(err => {    
       dispatch(setAlert(err.msg, "danger"));     
     })
   }

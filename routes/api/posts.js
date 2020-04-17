@@ -27,7 +27,7 @@ router.post("/", auth, [
       avatar : user.avatar,
     }  
     let post = await new PostModel(newPost).save();
-    return res.status(200).json({post});
+    return res.status(200).json(post);
   } catch (error) {
     console.log(error);
     return res.status(500).send("Server error");
@@ -42,7 +42,7 @@ router.post("/", auth, [
 router.get("/", auth, async (req, res) => {
   try {
     let posts = await PostModel.find().sort({date : -1});
-    return res.status(200).json({posts})
+    return res.status(200).json(posts)
   } catch (error) {
     console.log(error);
     return res.status(500).send("Server error");
@@ -60,7 +60,7 @@ router.get("/:postId", auth, async (req, res) => {
     if(!post) {
       return res.status(404).json({msg : "Post not found"});
     }
-    return res.status(200).json({post})
+    return res.status(200).json(post);
   } catch (err) {
     console.log(err);
     if(err instanceof require("mongoose").Error.CastError){
@@ -103,20 +103,23 @@ router.delete("/:id", auth, async (req, res) =>{
 
 router.put("/like/:id", auth, async (req, res) => {
   try {
-    const post = await PostModel.findById(req.params.id);
-
+    const post = await PostModel.findById(req.params.id);   
+     //check if the post has already unliked
+     let unlikedIndex = post.unlikes.findIndex( unlike => unlike.user.toString() == req.user.id);    
+     if(unlikedIndex != -1){
+       post.unlikes.splice(unlikedIndex,1);
+     }
     //Check if the post  has been already liked
-    if(post.likes.filter( like => like.user.toString() == req.user.id).length){
-      return res.status(400).json({msg : "Post already liked"});
-    }
-    //check if the post has already unliked
-    let unlikeIndex = post.unlikes.findIndex( unlike => unlike.user.toString() == req.user.id);
-    if(unlikeIndex != -1){
-      post.unlikes.splice(unlikeIndex,1);
-    }
+    let likedIndex = post.likes.findIndex(like => like.user.toString() == req.user.id);        
+    if(likedIndex != -1){
+      post.likes.splice(likedIndex,1);
+      await post.save();
+      return res.status(200).json({likes : post.likes , unlikes : post.unlikes });
+    }   
+   
     post.likes.unshift({user : req.user.id});
-    await post.save();
-    return res.status(200).json({post});
+    await post.save();   
+    return res.status(200).json({likes : post.likes , unlikes : post.unlikes });
   } catch (err) {
     console.log(err);
     return res.status(500).send("Server error");
@@ -131,18 +134,22 @@ router.put("/like/:id", auth, async (req, res) => {
 router.put("/unlike/:id", auth, async (req, res) => {
   try {
     const post = await PostModel.findById(req.params.id);
-
+    //Check if the post has been already liked
+    let likedIndex = post.likes.findIndex( like => like.user.toString() == req.user.id );
+    if(likedIndex != -1){
+      post.likes.splice(likedIndex, 1);
+    }
     //Check if the post  has been already unliked
-    if(post.unlikes.filter(unlike => unlike.user.toString() != req.user.id).length){
-      return res.status(400).json({msg : "Post already unliked"});
+    let unlikedIndex = post.unlikes.findIndex(unlike => unlike.user.toString() == req.user.id);    
+    if(unlikedIndex != -1){
+      post.unlikes.splice(unlikedIndex,1);
+      await post.save();
+      return res.status(200).json({likes : post.likes , unlikes : post.unlikes });
     }
-    let likeIndex = post.likes.findIndex( like => like.user.toString() == req.user.id );
-    if(likeIndex != -1){
-      post.likes.splice(likeIndex, 1);
-    }
+   
     post.unlikes.unshift({user : req.user.id});
-    await post.save();
-    return res.status(200).json({post});
+    await post.save();  
+    return res.status(200).json({likes : post.likes , unlikes : post.unlikes });
   } catch (err) {
     console.log(err);
     return res.status(500).send("Server error");
@@ -151,7 +158,7 @@ router.put("/unlike/:id", auth, async (req, res) => {
 
 /**
  * @route POST /api/posts/comment/:postId
- * @desc  comment a post
+ * @desc  add comment into a post
  * @access private
  */
 router.post("/comment/:postId", auth, [
@@ -172,7 +179,7 @@ router.post("/comment/:postId", auth, [
     };
     post.comments.unshift(newComment);
     await post.save();
-    return res.status(200).json({post});
+    return res.status(200).json(post.comments);
   } catch (error) {
     console.log(error);
     return res.status(500).send("Server error");
@@ -226,6 +233,7 @@ router.put("/comment/:postId/:comId", auth, [
 router.delete("/comment/:postId/:comId", auth, async (req, res)=>{
   try {
     let {postId, comId} = req.params;
+   
     let post = await PostModel.findById(postId);
     if(!post){
       return res.status(404).json({msg : "Not found this post"});
@@ -240,7 +248,7 @@ router.delete("/comment/:postId/:comId", auth, async (req, res)=>{
     }
     post.comments.splice(commentIndex, 1);
     await post.save();
-    return res.status(200).json({msg : "Comment is removed"});
+    return res.status(200).json(post.comments);
   } catch (err) {
     console.log(err);
   }

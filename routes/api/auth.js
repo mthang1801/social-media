@@ -53,7 +53,7 @@ router.post("/login",[
     return res.status(200).json({token, user})
   } catch (error) {
     console.log(error.message);
-    return res.status(400).json({errors : [{msg : "server error"}]});
+    return res.status(500).json({errors : [{msg : "Connect server failed"}]});
   }
 })
 module.exports = router; 

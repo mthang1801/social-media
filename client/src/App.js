@@ -12,6 +12,8 @@ import AddExperience from "./components/profile-forms/AddExperience";
 import AddEducation from "./components/profile-forms/AddEducation";
 import Profile from "./components/profile/Profile";
 import Profiles from "./components/profiles/Profiles";
+import Posts from "./components/posts/Posts";
+import Post from "./components/post/Post";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {Provider} from "react-redux";
 import store from "./store";
@@ -24,6 +26,7 @@ if(localStorage.token){
 }
 function App() {
   React.useEffect(() => {
+    console.log("OK");
     store.dispatch(loadUser());
   },[])
 
@@ -44,7 +47,8 @@ function App() {
             <PrivateRoute exact path="/edit-profile" component={EditProfile}></PrivateRoute>            
             <PrivateRoute exact path="/add-experience" component={AddExperience}></PrivateRoute>            
             <PrivateRoute exact path="/add-education" component={AddEducation}></PrivateRoute>                     
-            <Route path="*"><h2>404 - Not Found</h2></Route>
+            <PrivateRoute exact path="/posts" component={Posts}></PrivateRoute>            
+            <PrivateRoute exact path="/post/:id" component={Post}></PrivateRoute>            
           </Switch>
         </section>
       </Router>
