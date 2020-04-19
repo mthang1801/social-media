@@ -14,12 +14,14 @@ import Profile from "./components/profile/Profile";
 import Profiles from "./components/profiles/Profiles";
 import Posts from "./components/posts/Posts";
 import Post from "./components/post/Post";
+import NotFound from "./components/layout/NotFound";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {Provider} from "react-redux";
 import store from "./store";
 import Alert from "./components/layout/Alert";
 import {loadUser} from "./flux/actions/auth";
 import setAuthToken from "./utils/setAuthToken";
+
 
 if(localStorage.token){
   setAuthToken(localStorage.token);
@@ -48,7 +50,8 @@ function App() {
             <PrivateRoute exact path="/add-experience" component={AddExperience}></PrivateRoute>            
             <PrivateRoute exact path="/add-education" component={AddEducation}></PrivateRoute>                     
             <PrivateRoute exact path="/posts" component={Posts}></PrivateRoute>            
-            <PrivateRoute exact path="/post/:id" component={Post}></PrivateRoute>            
+            <PrivateRoute exact path="/post/:id" component={Post}></PrivateRoute>      
+            <Route component={NotFound}></Route>       
           </Switch>
         </section>
       </Router>
